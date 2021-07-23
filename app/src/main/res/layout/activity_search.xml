@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#222121"
+    android:layout_height="match_parent"
+    tools:context=".ChatService.SearchActivity">
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/pfp"
+            android:layout_gravity="center"
+            android:layout_width="35sp"
+            android:layout_height="35sp"
+            android:src="@drawable/common_google_signin_btn_icon_dark_focused" />
+
+        <EditText
+            android:id="@+id/searchbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center"
+            android:padding="10dp"
+            android:textColorHint="#5A5858"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/edittext"
+            android:baselineAligned="false"
+            android:drawableRight="@drawable/search"
+            android:hint="search"
+            android:paddingRight="15sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="10sp"
+            android:paddingLeft="20dp"
+            android:drawableEnd="@drawable/search" />
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_margin="10dp"
+        android:id="@+id/recycler_users"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+
+
+
+</LinearLayout>

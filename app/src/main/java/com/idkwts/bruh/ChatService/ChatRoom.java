@@ -1,0 +1,193 @@
+package com.idkwts.bruh.ChatService;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.idkwts.bruh.Fragments.ChatFragment;
+import com.idkwts.bruh.MainActivity;
+import com.idkwts.bruh.Model.User;
+import com.idkwts.bruh.R;
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class ChatRoom extends AppCompatActivity {
+
+    private List<User> mUsers;
+    FirebaseUser fuser;
+    DatabaseReference reference;
+    private List<ChatList> userList;
+    FloatingActionButton fb;
+    private RecyclerView recyclerViewChat,recyclerViewUsers;
+    private ChatUserAdapter userAdapter;
+    private List<User> mUser;
+    CircleImageView profile_image;
+    Button search;
+    FirebaseUser firebaseUser;
+    FirebaseAuth firebaseAuth;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chat_room);
+
+      //  fb = findViewById(R.id.fb);
+
+        recyclerViewChat = findViewById(R.id.recycler_view_chat);
+        recyclerViewChat.setHasFixedSize(true);
+        recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
+
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+        userList = new ArrayList<>();
+
+//        fb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(ChatScreen.this,CreateGroup.class));
+//            }
+//        });
+        //readusers
+        reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(fuser.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userList.clear();
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    ChatList chatList = snapshot.getValue(ChatList.class);
+                    userList.add(chatList);
+                }
+                chatList();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        profile_image = findViewById(R.id.pfp);
+        search = findViewById(R.id.searchnewusers);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        mUser = new ArrayList<>();
+        recyclerViewChat = findViewById(R.id.recycler_view_chat);
+
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ChatRoom.this, SearchActivity.class));
+            }
+        });
+
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ChatRoom.this, ChatFragment.class));
+            }
+        });
+
+//        //for pfp
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                ChatitUser user = dataSnapshot.getValue(ChatitUser.class);
+//                if (Objects.requireNonNull(user).getImageURL().equals("default")) {
+//                    profile_image.setImageResource(R.drawable.yawn);
+//                } else {
+//                    Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+
+    }
+
+    private void chatList(){
+
+        mUsers = new ArrayList<>();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mUsers.clear();
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    for (ChatList chatList:userList){
+                        if (user!=null && user.getId() != null && user.getId().equals(chatList.getId()))
+//                            if (user.getId().equals(chatList.getId()))
+                        {
+                            mUsers.add(user);
+                        }
+                    }
+                }
+                userAdapter = new ChatUserAdapter(getApplicationContext(), mUsers,true);
+                recyclerViewChat.setAdapter(userAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    //to confirm weather the user is logged in to the app or not
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() == null)
+        {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        }
+    }
+
+
+    public void status(String status)
+    {
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status",status);
+        reference.updateChildren(hashMap);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
+    }
+}

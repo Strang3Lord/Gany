@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <LinearLayout
+    android:orientation="vertical"
+    tools:context=".CreateGroup"
+    android:layout_height="match_parent" android:layout_width="match_parent" xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+        <EditText
+            android:id="@+id/edTxtGrpName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="25sp"
+            android:gravity="center_horizontal"
+            android:hint="Enter Group Name"
+            android:padding="10dp" />
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_select_users"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/linbtm"
+            android:layout_below="@+id/lintop"
+            app:layoutManager="LinearLayoutManager" />
+
+
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@drawable/edittext"
+        android:id="@+id/btnCreateGroup"
+        android:text="Create group"
+        android:clickable="true"/>
+
+
+
+</LinearLayout>
+

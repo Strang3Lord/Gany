@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#222121"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:id="@+id/img_on"
+        android:visibility="gone"
+        android:src="@drawable/online"
+        />
+    <androidx.cardview.widget.CardView
+        android:layout_marginHorizontal="15sp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="3dp"
+        app:cardCornerRadius="10dp"
+        android:background="#222121"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <LinearLayout
+            android:background="#222121"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_marginLeft="5dp"
+                android:id="@+id/profile_image_user_item"
+                android:padding="5dp"
+                android:layout_marginVertical="5dp"
+                android:layout_width="50dp"
+                android:src="@drawable/common_google_signin_btn_icon_dark"
+                android:layout_height="50dp"/>
+
+                <TextView
+                    android:id="@+id/username_user_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="9dp"
+                    android:text="username"
+                    android:textColor="#fff"
+                    android:textSize="18sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_more"
+                android:layout_marginRight="25dp"
+                android:id="@+id/more"/>
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
